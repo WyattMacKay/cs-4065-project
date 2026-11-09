@@ -12,8 +12,6 @@ var destination_pos: Vector2
 
 var tween: Tween
 
-var mouse_in := false
-
 
 func _ready():
 	add_user_signal("hit on one mole", [TYPE_OBJECT])
@@ -22,11 +20,6 @@ func _ready():
 	destination_pos = Vector2(original_pos.x, original_pos.y - 60)
 	set_process_input(true)
 	tween = create_tween()
-
-
-func _input(e):
-	if mouse_in && (e is InputEventMouseButton):
-		onClick()
 
 
 func gamestart():
@@ -84,9 +77,6 @@ func onIncomplete():
 		emit_signal("missing one mole", self)
 
 
-func _on_Area2D_mouse_entered():
-	mouse_in = true
-
-
-func _on_Area2D_mouse_exited():
-	mouse_in = false
+func _on_area_2d_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
+	if (event is InputEventMouseButton):
+		onClick()
