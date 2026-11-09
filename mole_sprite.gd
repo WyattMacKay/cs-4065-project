@@ -12,10 +12,11 @@ var destination_pos: Vector2
 
 var tween: Tween
 
+signal mole_hit(Object)
+signal mole_missed(Object)
+
 
 func _ready():
-	add_user_signal("hit on one mole", [TYPE_OBJECT])
-	add_user_signal("missing one mole", [TYPE_OBJECT])
 	original_pos = position
 	destination_pos = Vector2(original_pos.x, original_pos.y - 60)
 	set_process_input(true)
@@ -42,7 +43,7 @@ func onClick():
 	tween.start()
 
 	get_node("anim").play("die")
-	emit_signal("hit on one mole", self)
+	mole_hit.emit()
 
 
 func comeOut():
@@ -74,7 +75,7 @@ func comIn():
 func onIncomplete():
 	is_moving = false
 	if is_hittable:
-		emit_signal("missing one mole", self)
+		mole_hit.emit(self)
 
 
 func _on_area_2d_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
