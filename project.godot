@@ -24,6 +24,10 @@ window/size/viewport_height=480
 window/height=480
 window/width=320
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/GDQuest_GDScript_formatter/plugin.cfg")
+
 [input]
 
 ui_cancel={
