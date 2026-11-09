@@ -12,8 +12,11 @@ var destination_pos: Vector2
 
 var tween: Tween
 
-signal mole_hit(Object)
-signal mole_missed(Object)
+signal mole_hit(mole: Node2D)
+signal mole_missed(mole: Node2D)
+
+const DELAY: float = 0.5
+const TWEEN_TIME: float = 0.3
 
 
 func _ready():
@@ -27,7 +30,6 @@ func gamestart():
 	is_hittable = false
 	is_moving = false
 	position = original_pos
-	tween.start()
 
 
 func gameover():
@@ -39,43 +41,43 @@ func onClick():
 		return
 	is_hittable = false
 	tween.remove_all()
-	tween.interpolate_callback(self, 0.5, "comIn")
+	tween.tween_callback(submerge).set_delay(DELAY)
 	tween.start()
 
 	get_node("anim").play("die")
 	mole_hit.emit()
 
 
-func comeOut():
+func emerge():
 	is_moving = true
 	is_hittable = true
 
 	get_node("anim").play("run")
-	var t = 0.3
-
-	tween.interpolate_property(self, "position", position, destination_pos, t, Tween.TRANS_LINEAR, Tween.EASE_IN, 0)
-	tween.interpolate_callback(self, t, "onOutcomplete")
+	tween.tween_property(self, "position", destination_pos, TWEEN_TIME)
+	tween.set_trans(Tween.TRANS_LINEAR)
+	tween.set_ease(Tween.EASE_IN)
+	tween.tween_callback(emerge_complete).set_delay(DELAY)
 
 	tween.start()
 
 
-func onOutcomplete():
-	comIn()
+func emerge_complete():
+	submerge()
 
 
-func comIn():
-	var t = 0.3
-	var delay = 0.5
-
-	tween.interpolate_property(self, "position", position, original_pos, t, Tween.TRANS_LINEAR, Tween.EASE_IN, delay)
-	tween.interpolate_callback(self, t + delay, "onIncomplete")
+func submerge():
+	tween.tween_property(self, "position", original_pos, TWEEN_TIME)
+	tween.set_trans(Tween.TRANS_LINEAR)
+	tween.set_ease(Tween.EASE_IN)
+	tween.set_delay(DELAY)
+	tween.tween_callback(on_missed_hit_opportunity).set_delay(TWEEN_TIME + DELAY)
 	tween.start()
 
 
-func onIncomplete():
+func on_missed_hit_opportunity():
 	is_moving = false
 	if is_hittable:
-		mole_hit.emit(self)
+		mole_missed.emit(self)
 
 
 func _on_area_2d_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
