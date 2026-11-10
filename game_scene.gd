@@ -15,6 +15,8 @@ var maxscore_str = "best: "
 var level = 0
 var tween: Tween
 
+const DAMAGE := 25
+
 
 func _ready():
 	randomize()
@@ -63,7 +65,7 @@ func onHit(_obj: Target):
 
 
 func onMiss(_obj: Target):
-	hp = hp - 10
+	hp -= DAMAGE
 	update_health()
 
 
@@ -86,8 +88,7 @@ func emerge_random_target():
 	var mole = moleArr[idx]
 	if !gameOver:
 		if mole.is_moving:
-			reset_tween()
-			tween.tween_callback(emerge_random_target).set_delay(0.1)
+			emerge_random_target()
 		else:
 			mole.emerge()
 

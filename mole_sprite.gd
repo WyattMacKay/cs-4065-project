@@ -25,7 +25,6 @@ func _ready():
 	original_pos = position
 	destination_pos = Vector2(original_pos.x, original_pos.y - 60)
 	set_process_input(true)
-	tween = create_tween()
 
 
 func gamestart():
@@ -47,7 +46,7 @@ func on_click():
 	tween.tween_callback(submerge).set_delay(DELAY)
 
 	get_node("anim").play("die")
-	mole_hit.emit()
+	mole_hit.emit(self)
 
 
 func emerge():
