@@ -39,8 +39,6 @@ func _ready():
 	add_child(timer)
 	set_process(true)
 
-	tween = create_tween()
-
 
 func _process(_delta):
 	if (Input.is_action_pressed("ui_cancel")):
@@ -80,16 +78,16 @@ func gameover():
 
 func onTimer():
 	if !gameOver:
-		moleComeOut()
+		emerge_random_target()
 
 
-func moleComeOut():
+func emerge_random_target():
 	var idx = randi() % moleArr.size()
 	var mole = moleArr[idx]
-	if gameOver == false:
+	if !gameOver:
 		if mole.is_moving:
-			tween.remove_all()
-			tween.interpolate_callback(self, 0.1, "moleComeOut")
+			reset_tween()
+			tween.tween_callback(emerge_random_target).set_delay(0.1)
 		else:
 			mole.emerge()
 
@@ -142,3 +140,13 @@ func read():
 		v = f.get_64()
 		f.close()
 	return v
+
+
+func end_tween() -> void:
+	if tween and tween.is_valid():
+		tween.kill()
+
+
+func reset_tween() -> void:
+	end_tween()
+	tween = create_tween()
