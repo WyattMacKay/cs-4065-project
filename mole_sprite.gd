@@ -14,8 +14,8 @@ var destination_pos: Vector2
 
 var tween: Tween
 
-signal mole_hit(mole: Target)
-signal mole_missed(mole: Target)
+signal target_hit(mole: Target)
+signal target_missed(mole: Target)
 
 const DELAY: float = 0.5
 const TWEEN_TIME: float = 0.3
@@ -46,7 +46,7 @@ func on_click():
 	tween.tween_callback(submerge).set_delay(DELAY)
 
 	get_node("anim").play("die")
-	mole_hit.emit(self)
+	target_hit.emit(self)
 
 
 func emerge():
@@ -79,7 +79,7 @@ func submerge():
 func on_missed_hit_opportunity():
 	is_moving = false
 	if is_hittable:
-		mole_missed.emit(self)
+		target_missed.emit(self)
 		is_hittable = false
 
 

@@ -24,9 +24,9 @@ func _ready():
 		target_arr.push_back(get_node("bg" + str(i) + "/mole1"))
 		target_arr.push_back(get_node("bg" + str(i) + "/mole2"))
 
-	for mole: Target in target_arr:
-		mole.connect("mole_hit", _on_hit)
-		mole.connect("mole_missed", _on_miss)
+	for target: Target in target_arr:
+		target.connect("target_hit", _on_hit)
+		target.connect("target_missed", _on_miss)
 
 	highscore = read()
 	update_score()
@@ -73,8 +73,8 @@ func gameover():
 	get_node("Panel").show()
 	save()
 	timer.stop()
-	for mole: Target in target_arr:
-		mole.gameover()
+	for target: Target in target_arr:
+		target.gameover()
 
 
 func _on_timer_timeout():
@@ -83,11 +83,11 @@ func _on_timer_timeout():
 
 func emerge_random_target():
 	var idx = randi() % target_arr.size()
-	var mole = target_arr[idx]
-	if mole.is_moving:
+	var target = target_arr[idx]
+	if target.is_moving:
 		emerge_random_target()
 	else:
-		mole.emerge()
+		target.emerge()
 
 
 func update_score() -> void:
@@ -140,8 +140,8 @@ func _on_start_button_pressed() -> void:
 	score = 0
 	level = 0
 
-	for mole: Target in target_arr:
-		mole.gamestart()
+	for target: Target in target_arr:
+		target.gamestart()
 
 	update_health()
 
