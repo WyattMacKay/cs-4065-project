@@ -3,18 +3,17 @@
 #Author:xiaolu (QQ2604904)
 extends Node
 
-var moleArr = []
-var timer
-var hp = 100
-var point = 0
-var maxpoint = 0
-var gameOver = true
-var save_file = "user://savedata.bin"
-var arrlen = 0
+var moleArr: Array[Target] = []
+var timer: Timer
+var hp: int = 100
+var score: int = 0
+var highscore: int = 0
+var gameOver := true
+var save_file := "user://savedata.bin"
 var score_str = "score: "
 var maxscore_str = "best: "
 var level = 0
-var tween
+var tween: Tween
 
 
 func _ready():
@@ -24,15 +23,13 @@ func _ready():
 		moleArr.push_back(get_node("bg" + str(i) + "/mole1"))
 		moleArr.push_back(get_node("bg" + str(i) + "/mole2"))
 
-	arrlen = moleArr.size()
+	for mole: Target in moleArr:
+		mole.connect("mole_hit", onHit)
+		mole.connect("mole_missed", onMiss)
 
-	for i in range(arrlen):
-		moleArr[i].connect("hit on one mole", Callable(self, "onHit"))
-		moleArr[i].connect("missing one mole", Callable(self, "onMiss"))
-
-	maxpoint = read()
-	get_node("score").set_text(score_str + str(point))
-	get_node("maxscore").set_text(maxscore_str + str(maxpoint))
+	highscore = read()
+	update_score()
+	get_node("maxscore").set_text(maxscore_str + str(highscore))
 
 	timer = Timer.new()
 	timer.connect("timeout", Callable(self, "onTimer"))
@@ -45,7 +42,7 @@ func _ready():
 	tween = create_tween()
 
 
-func _process(delta):
+func _process(_delta):
 	if (Input.is_action_pressed("ui_cancel")):
 		get_tree().quit()
 
@@ -62,68 +59,79 @@ func change_speed():
 	print("change game level" + str(speed()))
 
 
-func onHit(obj):
-	point = point + 1
-	get_node("score").set_text(score_str + str(point))
-	if maxpoint < point:
-		maxpoint = point
-		save()
-	get_node("maxscore").set_text(maxscore_str + str(maxpoint))
-
-	if (point > 0 and point % 25 == 0):
-		change_speed()
+func onHit(_obj: Target):
+	score += 1
+	update_score()
 
 
-func onMiss(obj):
+func onMiss(_obj: Target):
 	hp = hp - 10
-	if hp < 0:
-		hp = 0
-	get_node("hp").set_value(hp)
-	if hp == 0:
-		gameOver = true
-		get_node("Panel").show()
-		timer.stop()
-		for i in range(moleArr.size()):
-			moleArr[i].gameover()
+	update_health()
+
+
+func gameover():
+	gameOver = true
+	get_node("Panel").show()
+	save()
+	timer.stop()
+	for mole: Target in moleArr:
+		mole.gameover()
 
 
 func onTimer():
-	if gameOver == false:
+	if !gameOver:
 		moleComeOut()
 
 
 func moleComeOut():
-	var idx = randi() % arrlen
+	var idx = randi() % moleArr.size()
 	var mole = moleArr[idx]
 	if gameOver == false:
-		if mole.status == 1:
+		if mole.is_moving:
 			tween.remove_all()
 			tween.interpolate_callback(self, 0.1, "moleComeOut")
 		else:
-			mole.comeOut()
+			mole.emerge()
 
 
 func _on_startButton_pressed():
 	get_node("Panel").hide()
 	gameOver = false
 	hp = 100
-	point = 0
+	score = 0
 	level = 0
 
-	for i in range(moleArr.size()):
-		moleArr[i].gamestart()
+	for mole: Target in moleArr:
+		mole.gamestart()
 
-	get_node("hp").set_value(hp)
-	get_node("score").set_text(score_str + str(point))
+	update_health()
+
 	timer.set_wait_time(speed())
 	timer.start()
+
+
+func update_score() -> void:
+	get_node("score").set_text("Score: " + str(score))
+	if highscore < score:
+		highscore = score
+		get_node("maxscore").set_text(maxscore_str + str(highscore))
+	if (score > 0 and score % 25 == 0):
+		change_speed()
+
+
+func update_health() -> void:
+	if hp < 0:
+		hp = 0
+	get_node("hp").set_value(hp)
+	if hp == 0:
+		gameover()
 
 
 func save():
 	var f: FileAccess = FileAccess.open_encrypted_with_pass(save_file, FileAccess.WRITE, "godot")
 	if (!f):
 		return
-	f.store_64(maxpoint)
+	f.store_64(highscore)
 	f.close()
 
 
