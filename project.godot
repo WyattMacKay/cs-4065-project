@@ -21,6 +21,8 @@ main_scene=""
 
 window/size/viewport_width=320
 window/size/viewport_height=480
+window/stretch/mode="canvas_items"
+window/handheld/orientation=1
 window/height=480
 window/width=320
 
