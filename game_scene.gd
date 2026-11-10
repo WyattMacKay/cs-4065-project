@@ -3,12 +3,11 @@
 #Author:xiaolu (QQ2604904)
 extends Node
 
-var moleArr: Array[Target] = []
+var target_arr: Array[Target] = []
 var timer: Timer
 var hp: int = 100
 var score: int = 0
 var highscore: int = 0
-var gameOver := true
 var save_file := "user://savedata.bin"
 var score_str = "score: "
 var maxscore_str = "best: "
@@ -21,20 +20,20 @@ const DAMAGE := 25
 func _ready():
 	randomize()
 	for i in range(3):
-		moleArr.push_back(get_node("bg" + str(i) + "/mole0"))
-		moleArr.push_back(get_node("bg" + str(i) + "/mole1"))
-		moleArr.push_back(get_node("bg" + str(i) + "/mole2"))
+		target_arr.push_back(get_node("bg" + str(i) + "/mole0"))
+		target_arr.push_back(get_node("bg" + str(i) + "/mole1"))
+		target_arr.push_back(get_node("bg" + str(i) + "/mole2"))
 
-	for mole: Target in moleArr:
-		mole.connect("mole_hit", onHit)
-		mole.connect("mole_missed", onMiss)
+	for mole: Target in target_arr:
+		mole.connect("mole_hit", _on_hit)
+		mole.connect("mole_missed", _on_miss)
 
 	highscore = read()
 	update_score()
 	get_node("maxscore").set_text(maxscore_str + str(highscore))
 
 	timer = Timer.new()
-	timer.connect("timeout", Callable(self, "onTimer"))
+	timer.connect("timeout", Callable(self, "_on_timer_timeout"))
 	timer.set_one_shot(false)
 	timer.set_wait_time(speed())
 
@@ -59,54 +58,36 @@ func change_speed():
 	print("change game level" + str(speed()))
 
 
-func onHit(_obj: Target):
+func _on_hit(_obj: Target):
 	score += 1
 	update_score()
 
 
-func onMiss(_obj: Target):
+func _on_miss(_obj: Target):
 	hp -= DAMAGE
 	update_health()
 
 
 func gameover():
-	gameOver = true
+	end_tween()
 	get_node("Panel").show()
 	save()
 	timer.stop()
-	for mole: Target in moleArr:
+	for mole: Target in target_arr:
 		mole.gameover()
 
 
-func onTimer():
-	if !gameOver:
-		emerge_random_target()
+func _on_timer_timeout():
+	emerge_random_target()
 
 
 func emerge_random_target():
-	var idx = randi() % moleArr.size()
-	var mole = moleArr[idx]
-	if !gameOver:
-		if mole.is_moving:
-			emerge_random_target()
-		else:
-			mole.emerge()
-
-
-func _on_startButton_pressed():
-	get_node("Panel").hide()
-	gameOver = false
-	hp = 100
-	score = 0
-	level = 0
-
-	for mole: Target in moleArr:
-		mole.gamestart()
-
-	update_health()
-
-	timer.set_wait_time(speed())
-	timer.start()
+	var idx = randi() % target_arr.size()
+	var mole = target_arr[idx]
+	if mole.is_moving:
+		emerge_random_target()
+	else:
+		mole.emerge()
 
 
 func update_score() -> void:
@@ -151,3 +132,18 @@ func end_tween() -> void:
 func reset_tween() -> void:
 	end_tween()
 	tween = create_tween()
+
+
+func _on_start_button_pressed() -> void:
+	get_node("Panel").hide()
+	hp = 100
+	score = 0
+	level = 0
+
+	for mole: Target in target_arr:
+		mole.gamestart()
+
+	update_health()
+
+	timer.set_wait_time(speed())
+	timer.start()
