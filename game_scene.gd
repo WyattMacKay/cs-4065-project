@@ -7,7 +7,6 @@ extends Node
 
 var target_arr: Array[Target] = []
 var timer: Timer
-var hp: int = 100
 var score: int = 0
 var highscore: int = 0
 var save_file := "user://savedata.bin"
@@ -16,7 +15,7 @@ var maxscore_str: String
 var tween: Tween
 
 const DAMAGE := 25
-const SPAWN_SPEED := 1
+const SPAWN_SPEED := 2 # Time between spawns in seconds
 const EXPERIMENT_DURATION := 30
 
 
@@ -86,14 +85,6 @@ func update_highscore() -> void:
 	get_node("maxscore").set_text("Best: " + str(highscore))
 
 
-func update_health() -> void:
-	if hp < 0:
-		hp = 0
-	get_node("hp").set_value(hp)
-	if hp == 0:
-		gameover()
-
-
 func save():
 	var f: FileAccess = FileAccess.open_encrypted_with_pass(save_file, FileAccess.WRITE, "godot")
 	if (!f):
@@ -125,13 +116,11 @@ func _on_start_button_pressed() -> void:
 	get_node("Panel").hide()
 	reset_game_timer()
 	timer_display.start()
-	hp = 100
 	score = 0
 
 	for target: Target in target_arr:
 		target.gamestart()
 
-	update_health()
 	timer.set_wait_time(SPAWN_SPEED)
 	timer.start()
 
