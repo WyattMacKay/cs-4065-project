@@ -6,6 +6,14 @@ extends Node
 @export var timer_display: CustomTimer
 @export var all_targets: Array[Target] = []
 
+# TODO play sound on click
+# TODO vibrate on click
+# TODO count misses
+# TODO get click speed
+# TODO mobile data collection
+# TODO mobile export
+# TODO use a set seed
+
 var inactive_targets: Array[Target] = []
 
 var timer: Timer
