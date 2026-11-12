@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://pyreayxgdqvo"]
+
+[ext_resource type="Script" uid="uid://cvkivvbgtxsby" path="res://scenes/custom_timer/custom_timer.gd" id="1_43icy"]
+
+[node name="Time" type="Control" unique_id=869313044 node_paths=PackedStringArray("timer_bar")]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_43icy")
+timer_bar = NodePath("ColorRect2")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=632824438]
+layout_mode = 0
+offset_left = 77.0
+offset_top = 413.0
+offset_right = 305.0
+offset_bottom = 453.0
+color = Color(0.2513605, 0.30005506, 0.3352951, 1)
+
+[node name="ColorRect2" type="ColorRect" parent="." unique_id=764459058]
+layout_mode = 0
+offset_left = 95.0
+offset_top = 415.0
+offset_right = 295.0
+offset_bottom = 455.0
+color = Color(0.3655, 0.85, 0.85, 1)

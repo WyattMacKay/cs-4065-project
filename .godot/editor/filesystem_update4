@@ -1,4 +1,2 @@
-res://game_scene.scn
-res://game_scene.gd
-res://mole_sprite.gd
-res://mole_sprite.scn
+res://scenes/game_windows/whacamole/whacamole.scn
+res://scenes/game_windows/game_scene.gd

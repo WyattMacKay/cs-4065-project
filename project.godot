@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="MoleGame"
-run/main_scene="res://game_scene.scn"
+run/main_scene="res://scenes/game_windows/whacamole/whacamole.scn"
 config/features=PackedStringArray("4.7")
 icon="res://icon.png"
 name="mole"
