@@ -29,7 +29,6 @@ func _ready():
 
 	for target: Target in target_arr:
 		target.connect("target_hit", _on_hit)
-		target.connect("target_missed", _on_miss)
 
 	highscore = read()
 	update_score()
@@ -52,11 +51,6 @@ func _process(_delta):
 func _on_hit(_obj: Target):
 	score += 1
 	update_score()
-
-
-func _on_miss(_obj: Target):
-	hp -= DAMAGE
-	update_health()
 
 
 func gameover():

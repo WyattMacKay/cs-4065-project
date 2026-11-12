@@ -8,7 +8,6 @@ class_name Target
 var is_moving := false
 var is_hittable := false
 
-var speed := 0.0
 var original_pos: Vector2
 var destination_pos: Vector2
 
@@ -59,11 +58,6 @@ func emerge():
 	tween.tween_property(self, "position", destination_pos, TWEEN_TIME) \
 	.set_trans(Tween.TRANS_LINEAR) \
 	.set_ease(Tween.EASE_IN)
-	tween.tween_callback(emerge_complete).set_delay(DELAY)
-
-
-func emerge_complete():
-	submerge()
 
 
 func submerge():
@@ -78,9 +72,6 @@ func submerge():
 
 func on_missed_hit_opportunity():
 	is_moving = false
-	if is_hittable:
-		target_missed.emit(self)
-		is_hittable = false
 
 
 func end_tween() -> void:
