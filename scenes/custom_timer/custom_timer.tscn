@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://pyreayxgdqvo"]
 
-[ext_resource type="Script" uid="uid://cvkivvbgtxsby" path="res://custom_timer/custom_timer.gd" id="1_43icy"]
+[ext_resource type="Script" uid="uid://cvkivvbgtxsby" path="res://scenes/custom_timer/custom_timer.gd" id="1_43icy"]
 
 [node name="Time" type="Control" unique_id=869313044 node_paths=PackedStringArray("timer_bar")]
 layout_mode = 3
