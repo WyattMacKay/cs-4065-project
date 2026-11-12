@@ -124,4 +124,5 @@ func reset_game_timer() -> void:
 	add_child(new_timer)
 	new_timer.one_shot = true
 	new_timer.start(EXPERIMENT_DURATION)
+	new_timer.timeout.connect(gameover)
 	timer_display.timer = new_timer
