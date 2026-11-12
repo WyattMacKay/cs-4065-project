@@ -1,4 +1,4 @@
 res://game_scene.scn
+res://custom_timer/custom_timer.tscn
+res://custom_timer/custom_timer.gd
 res://game_scene.gd
-res://mole_sprite.gd
-res://mole_sprite.scn

@@ -3,6 +3,8 @@
 #Author:xiaolu (QQ2604904)
 extends Node
 
+@export var timer_display: CustomTimer
+
 var target_arr: Array[Target] = []
 var timer: Timer
 var hp: int = 100
@@ -136,6 +138,8 @@ func reset_tween() -> void:
 
 func _on_start_button_pressed() -> void:
 	get_node("Panel").hide()
+	reset_game_timer()
+	timer_display.start()
 	hp = 100
 	score = 0
 	level = 0
@@ -144,6 +148,13 @@ func _on_start_button_pressed() -> void:
 		target.gamestart()
 
 	update_health()
-
 	timer.set_wait_time(speed())
 	timer.start()
+
+
+func reset_game_timer() -> void:
+	var new_timer := Timer.new()
+	add_child(new_timer)
+	new_timer.one_shot = true
+	new_timer.start(30)
+	timer_display.timer = new_timer
