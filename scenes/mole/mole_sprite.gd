@@ -58,6 +58,7 @@ func emerge():
 	tween.tween_property(self, "position", destination_pos, TWEEN_TIME) \
 	.set_trans(Tween.TRANS_LINEAR) \
 	.set_ease(Tween.EASE_IN)
+	play_stimulus()
 
 
 func submerge():
@@ -83,6 +84,12 @@ func end_tween() -> void:
 func reset_tween() -> void:
 	end_tween()
 	tween = create_tween()
+
+
+func play_stimulus() -> void:
+	const DURATION_MS := 100
+	const AMPLITUDE := 0.25
+	Input.vibrate_handheld(DURATION_MS, AMPLITUDE)
 
 
 func _on_area_2d_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
