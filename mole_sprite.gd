@@ -14,6 +14,7 @@ var destination_pos: Vector2
 var tween: Tween
 
 signal target_hit(mole: Target)
+signal inactive(mole: Target)
 
 const DELAY: float = 0.3
 const TWEEN_TIME: float = 0.1
@@ -71,6 +72,7 @@ func submerge():
 
 func on_missed_hit_opportunity():
 	is_moving = false
+	inactive.emit(self)
 
 
 func end_tween() -> void:

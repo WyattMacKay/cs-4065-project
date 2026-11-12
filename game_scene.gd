@@ -4,8 +4,10 @@
 extends Node
 
 @export var timer_display: CustomTimer
+@export var all_targets: Array[Target] = []
 
-var target_arr: Array[Target] = []
+var inactive_targets: Array[Target] = []
+
 var timer: Timer
 var score: int = 0
 var save_file := "user://savedata.bin"
@@ -14,19 +16,18 @@ var maxscore_str: String
 var tween: Tween
 
 const DAMAGE := 25
-const SPAWN_SPEED := 2 # Time between spawns in seconds
+const SPAWN_SPEED := .75 # Time between spawns in seconds
 const EXPERIMENT_DURATION := 30
 
 
 func _ready():
 	randomize()
-	for i in range(3):
-		target_arr.push_back(get_node("bg" + str(i) + "/mole0"))
-		target_arr.push_back(get_node("bg" + str(i) + "/mole1"))
-		target_arr.push_back(get_node("bg" + str(i) + "/mole2"))
 
-	for target: Target in target_arr:
+	for target: Target in all_targets:
 		target.connect("target_hit", _on_hit)
+		target.connect("inactive", _on_inactive)
+
+	inactive_targets = all_targets
 
 	update_score()
 
@@ -49,11 +50,15 @@ func _on_hit(_obj: Target):
 	update_score()
 
 
+func _on_inactive(obj: Target):
+	inactive_targets.append(obj)
+
+
 func gameover():
 	end_tween()
 	get_node("Panel").show()
 	timer.stop()
-	for target: Target in target_arr:
+	for target: Target in all_targets:
 		target.gameover()
 
 
@@ -62,12 +67,12 @@ func _on_timer_timeout():
 
 
 func emerge_random_target():
-	var idx = randi() % target_arr.size()
-	var target = target_arr[idx]
-	if target.is_moving:
-		emerge_random_target()
-	else:
-		target.emerge()
+	if inactive_targets.is_empty():
+		return
+	var idx = randi() % inactive_targets.size()
+	var target = inactive_targets[idx]
+	target.emerge()
+	inactive_targets.erase(target)
 
 
 func update_score() -> void:
@@ -107,7 +112,7 @@ func _on_start_button_pressed() -> void:
 	timer_display.start()
 	score = 0
 
-	for target: Target in target_arr:
+	for target: Target in all_targets:
 		target.gamestart()
 
 	timer.set_wait_time(SPAWN_SPEED)
