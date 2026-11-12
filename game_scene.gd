@@ -13,10 +13,11 @@ var highscore: int = 0
 var save_file := "user://savedata.bin"
 var score_str: String
 var maxscore_str: String
-var level = 0
 var tween: Tween
 
 const DAMAGE := 25
+const SPAWN_SPEED := 1
+const EXPERIMENT_DURATION := 30
 
 
 func _ready():
@@ -37,7 +38,7 @@ func _ready():
 	timer = Timer.new()
 	timer.connect("timeout", Callable(self, "_on_timer_timeout"))
 	timer.set_one_shot(false)
-	timer.set_wait_time(speed())
+	timer.set_wait_time(SPAWN_SPEED)
 
 	add_child(timer)
 	set_process(true)
@@ -46,18 +47,6 @@ func _ready():
 func _process(_delta):
 	if (Input.is_action_pressed("ui_cancel")):
 		get_tree().quit()
-
-
-func speed():
-	return (10.0 - level) / 10.0
-
-
-func change_speed():
-	level = level + 1
-	if (level >= 5):
-		level = 5
-	timer.set_wait_time(speed())
-	print("change game level" + str(speed()))
 
 
 func _on_hit(_obj: Target):
@@ -97,8 +86,6 @@ func update_score() -> void:
 	if highscore < score:
 		highscore = score
 		update_highscore()
-	if (score > 0 and score % 25 == 0):
-		change_speed()
 
 
 func update_highscore() -> void:
@@ -146,13 +133,12 @@ func _on_start_button_pressed() -> void:
 	timer_display.start()
 	hp = 100
 	score = 0
-	level = 0
 
 	for target: Target in target_arr:
 		target.gamestart()
 
 	update_health()
-	timer.set_wait_time(speed())
+	timer.set_wait_time(SPAWN_SPEED)
 	timer.start()
 
 
@@ -160,5 +146,5 @@ func reset_game_timer() -> void:
 	var new_timer := Timer.new()
 	add_child(new_timer)
 	new_timer.one_shot = true
-	new_timer.start(30)
+	new_timer.start(EXPERIMENT_DURATION)
 	timer_display.timer = new_timer
