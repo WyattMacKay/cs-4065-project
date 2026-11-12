@@ -8,7 +8,6 @@ extends Node
 var target_arr: Array[Target] = []
 var timer: Timer
 var score: int = 0
-var highscore: int = 0
 var save_file := "user://savedata.bin"
 var score_str: String
 var maxscore_str: String
@@ -29,9 +28,7 @@ func _ready():
 	for target: Target in target_arr:
 		target.connect("target_hit", _on_hit)
 
-	highscore = read()
 	update_score()
-	update_highscore()
 
 	timer = Timer.new()
 	timer.connect("timeout", Callable(self, "_on_timer_timeout"))
@@ -55,7 +52,6 @@ func _on_hit(_obj: Target):
 func gameover():
 	end_tween()
 	get_node("Panel").show()
-	save()
 	timer.stop()
 	for target: Target in target_arr:
 		target.gameover()
@@ -76,30 +72,23 @@ func emerge_random_target():
 
 func update_score() -> void:
 	get_node("score").set_text("Score: " + str(score))
-	if highscore < score:
-		highscore = score
-		update_highscore()
 
-
-func update_highscore() -> void:
-	get_node("maxscore").set_text("Best: " + str(highscore))
-
-
-func save():
-	var f: FileAccess = FileAccess.open_encrypted_with_pass(save_file, FileAccess.WRITE, "godot")
-	if (!f):
-		return
-	f.store_64(highscore)
-	f.close()
-
-
-func read():
-	var v = 0
-	if FileAccess.file_exists(save_file):
-		var f := FileAccess.open_encrypted_with_pass(save_file, FileAccess.READ, "godot")
-		v = f.get_64()
-		f.close()
-	return v
+# Commented out for future use in saving user data
+#func save():
+#var f: FileAccess = FileAccess.open_encrypted_with_pass(save_file, FileAccess.WRITE, "godot")
+#if (!f):
+#return
+#f.store_64(highscore)
+#f.close()
+#
+#
+#func read():
+#var v = 0
+#if FileAccess.file_exists(save_file):
+#var f := FileAccess.open_encrypted_with_pass(save_file, FileAccess.READ, "godot")
+#v = f.get_64()
+#f.close()
+#return v
 
 
 func end_tween() -> void:
