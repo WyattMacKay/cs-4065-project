@@ -11,8 +11,8 @@ var hp: int = 100
 var score: int = 0
 var highscore: int = 0
 var save_file := "user://savedata.bin"
-var score_str = "score: "
-var maxscore_str = "best: "
+var score_str: String
+var maxscore_str: String
 var level = 0
 var tween: Tween
 
@@ -32,7 +32,7 @@ func _ready():
 
 	highscore = read()
 	update_score()
-	get_node("maxscore").set_text(maxscore_str + str(highscore))
+	update_highscore()
 
 	timer = Timer.new()
 	timer.connect("timeout", Callable(self, "_on_timer_timeout"))
@@ -96,9 +96,13 @@ func update_score() -> void:
 	get_node("score").set_text("Score: " + str(score))
 	if highscore < score:
 		highscore = score
-		get_node("maxscore").set_text(maxscore_str + str(highscore))
+		update_highscore()
 	if (score > 0 and score % 25 == 0):
 		change_speed()
+
+
+func update_highscore() -> void:
+	get_node("maxscore").set_text("Best: " + str(highscore))
 
 
 func update_health() -> void:
