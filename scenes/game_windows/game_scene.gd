@@ -15,7 +15,7 @@ extends Node
 
 var inactive_targets: Array[Target] = []
 
-var timer: Timer
+var spawn_timer: Timer
 var score: int = 0
 var save_file := "user://savedata.bin"
 var score_str: String
@@ -23,7 +23,8 @@ var maxscore_str: String
 var tween: Tween
 
 const DAMAGE := 25
-const SPAWN_SPEED := .75 # Time between spawns in seconds
+const SPAWN_SPEED_FLOOR := 2.0 # Time between spawns in seconds
+const SPAWN_SEED_CEILING := 5.0
 const EXPERIMENT_DURATION := 30
 
 
@@ -35,15 +36,13 @@ func _ready():
 		target.connect("inactive", _on_inactive)
 
 	inactive_targets = all_targets
-
 	update_score()
 
-	timer = Timer.new()
-	timer.connect("timeout", Callable(self, "_on_timer_timeout"))
-	timer.set_one_shot(false)
-	timer.set_wait_time(SPAWN_SPEED)
+	spawn_timer = Timer.new()
+	spawn_timer.connect("timeout", Callable(self, "_on_timer_timeout"))
+	spawn_timer.set_one_shot(false)
 
-	add_child(timer)
+	add_child(spawn_timer)
 	set_process(true)
 
 
@@ -64,7 +63,7 @@ func _on_inactive(obj: Target):
 func gameover():
 	end_tween()
 	get_node("Panel").show()
-	timer.stop()
+	spawn_timer.stop()
 	for target: Target in all_targets:
 		target.gameover()
 
@@ -121,9 +120,12 @@ func _on_start_button_pressed() -> void:
 
 	for target: Target in all_targets:
 		target.gamestart()
+	reset_spawn_timer()
 
-	timer.set_wait_time(SPAWN_SPEED)
-	timer.start()
+
+func reset_spawn_timer() -> void:
+	var wait_time = randf() * (SPAWN_SEED_CEILING - SPAWN_SPEED_FLOOR) + SPAWN_SPEED_FLOOR
+	spawn_timer.start(wait_time)
 
 
 func reset_game_timer() -> void:
