@@ -15,6 +15,7 @@ func _ready() -> void:
 func on_click() -> void:
 	super.on_click()
 	rect.color = inactive_colour
+	emit_inactive()
 
 
 func emerge() -> void:

@@ -49,7 +49,7 @@ func submerge():
 			.set_trans(Tween.TRANS_LINEAR) \
 			.set_ease(Tween.EASE_IN)
 
-	tween.tween_callback(on_missed_hit_opportunity)
+	tween.tween_callback(emit_inactive)
 
 
 func end_tween() -> void:

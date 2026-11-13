@@ -47,7 +47,7 @@ func on_click() -> void:
 	play_audio(click_sound)
 
 
-func on_missed_hit_opportunity() -> void:
+func emit_inactive() -> void:
 	inactive.emit(self)
 
 
