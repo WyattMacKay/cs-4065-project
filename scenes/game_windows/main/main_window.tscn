@@ -5,7 +5,10 @@
 [ext_resource type="PackedScene" uid="uid://b1rw02nqh3lgj" path="res://scenes/game_windows/whacamole/whacamole.scn" id="2_dqhrp"]
 [ext_resource type="PackedScene" uid="uid://bnl4csxdjuaca" path="res://scenes/game_windows/classic-hci/classic_hci_experiment.tscn" id="3_tbl4c"]
 
-[node name="MainWindow" type="Control" unique_id=359813338 node_paths=PackedStringArray("id_edit")]
+[sub_resource type="Theme" id="Theme_vrjg8"]
+default_font_size = 12
+
+[node name="MainWindow" type="Control" unique_id=359813338 node_paths=PackedStringArray("id_edit", "test_checkbox")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -16,6 +19,7 @@ script = ExtResource("1_w4uav")
 whacamole_scene = ExtResource("2_dqhrp")
 hci_scene = ExtResource("3_tbl4c")
 id_edit = NodePath("LineEdit")
+test_checkbox = NodePath("CheckBox")
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=837683189]
 layout_mode = 0
@@ -61,9 +65,19 @@ text = "Wipe Data"
 layout_mode = 0
 offset_left = 91.0
 offset_top = 116.0
-offset_right = 222.0
+offset_right = 197.0
 offset_bottom = 147.0
 placeholder_text = "ID"
+
+[node name="CheckBox" type="CheckBox" parent="." unique_id=1216530197]
+layout_mode = 0
+offset_left = 210.0
+offset_top = 122.0
+offset_right = 234.0
+offset_bottom = 146.0
+theme = SubResource("Theme_vrjg8")
+button_pressed = true
+text = "Test"
 
 [connection signal="pressed" from="HCIButton" to="." method="_on_hci_button_pressed"]
 [connection signal="pressed" from="WhacAMoleButton" to="." method="_on_whac_a_mole_button_pressed"]
