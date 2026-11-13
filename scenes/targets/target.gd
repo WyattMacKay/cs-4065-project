@@ -9,9 +9,6 @@ extends Node2D
 @export var click_sound: AudioStream
 @export var click_area: Area2D
 
-var is_moving := false
-var is_hittable := false
-
 var time_at_activation: int
 
 signal target_hit(target: Target, time: int)
@@ -30,8 +27,6 @@ func _ready() -> void:
 
 
 func gamestart() -> void:
-	is_hittable = false
-	is_moving = false
 	click_area.input_pickable = false
 
 
@@ -40,26 +35,18 @@ func gameover() -> void
 
 
 func emerge() -> void:
-	is_moving = true
-	is_hittable = true
-
 	play_stimulus()
 	click_area.input_pickable = true
 	time_at_activation = Time.get_ticks_msec()
 
 
 func on_click() -> void:
-	if !is_hittable:
-		return
-
-	is_hittable = false
 	target_hit.emit(self, Time.get_ticks_msec() - time_at_activation)
 	click_area.input_pickable = false
 	play_audio(click_sound)
 
 
 func on_missed_hit_opportunity() -> void:
-	is_moving = false
 	inactive.emit(self)
 
 
