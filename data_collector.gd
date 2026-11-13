@@ -2,24 +2,49 @@ extends Node
 
 const LOG_FILE := "user://game_data.csv"
 
+var csv_header := PackedStringArray(
+	[
+		"User ID",
+		"Data Collection Method",
+		"Trial Number",
+		"Trial Location",
+		"Number of Misclicks",
+		"Time",
+	]
+)
+
 
 func append_data(misclicks: int, time: int):
-	var access_code: FileAccess.ModeFlags = (
-		FileAccess.READ_WRITE
-		if FileAccess.file_exists(LOG_FILE)
-		else FileAccess.WRITE_READ
-	)
-	var f := FileAccess.open(LOG_FILE, access_code)
-	if (!f):
-		var error = FileAccess.get_open_error()
-		push_error("Failed to open CSV. Error code: " + str(error))
-		push_error("User data directory: " + OS.get_user_data_dir())
-		return
-	f.seek_end()
-	if (f.get_length() == 0):
-		f.store_csv_line(PackedStringArray(["# of misclicks", "time"]))
+	var f: FileAccess
 
-	f.store_csv_line(PackedStringArray([misclicks, time]))
+	if FileAccess.file_exists(LOG_FILE):
+		f = FileAccess.open(LOG_FILE, FileAccess.READ_WRITE)
+	else:
+		f = FileAccess.open(LOG_FILE, FileAccess.WRITE_READ)
+
+	if f == null:
+		push_error("Failed to open CSV: " + str(FileAccess.get_open_error()))
+		return
+
+	if f.get_length() > 0:
+		var existing_header = f.get_csv_line()
+
+		if existing_header != csv_header:
+			print("CSV format has changed. Restarting data collection.")
+
+			f.close()
+			f = FileAccess.open(LOG_FILE, FileAccess.WRITE_READ)
+
+			if f == null:
+				push_error("Failed to reset CSV.")
+				return
+
+	if f.get_length() == 0:
+		f.store_csv_line(csv_header)
+
+	f.seek_end()
+	f.store_csv_line(PackedStringArray([str(misclicks), str(time)]))
+
 	f.flush()
 	f.close()
 
@@ -64,5 +89,3 @@ func _on_export_file_selected(
 
 	destination.store_string(csv_contents)
 	destination.close()
-
-	print("CSV successfully exported!")
