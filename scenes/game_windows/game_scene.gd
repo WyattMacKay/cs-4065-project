@@ -1,6 +1,3 @@
-#https://github.com/lulersoft/godot_mole_game
-#Godot QQ Group: 302924317
-#Author:xiaolu (QQ2604904)
 extends Node
 
 @export var timer_display: CustomTimer
@@ -9,8 +6,6 @@ extends Node
 # TODO count misses
 # TODO get click speed
 # TODO mobile data collection
-# TODO use a set seed
-# TODO randomize spawn rate
 # TODO add music to mole game
 
 var inactive_targets: Array[Target] = []
