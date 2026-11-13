@@ -76,7 +76,6 @@ offset_top = 122.0
 offset_right = 234.0
 offset_bottom = 146.0
 theme = SubResource("Theme_vrjg8")
-button_pressed = true
 text = "Test"
 
 [connection signal="pressed" from="HCIButton" to="." method="_on_hci_button_pressed"]

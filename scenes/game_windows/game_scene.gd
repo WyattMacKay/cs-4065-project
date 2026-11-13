@@ -17,7 +17,7 @@ var trial_count := 0
 
 const SPAWN_SPEED_FLOOR := 2.0 # Time between spawns in seconds
 const SPAWN_SEED_CEILING := 5.0
-const EXPERIMENT_DURATION := 10 # Entire experiment time in seconds
+const EXPERIMENT_DURATION := 300 # Entire experiment time in seconds
 const MAIN_MENU := "res://scenes/game_windows/main/main_window.tscn"
 
 
