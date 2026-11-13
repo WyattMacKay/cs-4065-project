@@ -11,6 +11,8 @@ func _ready() -> void:
 	assert(whacamole_scene != null, "Export variable HCI Scene missing in " + name)
 	assert(whacamole_scene != null, "Export variable ID Edit missing in " + name)
 	assert(whacamole_scene != null, "Export variable Test Checkbox missing in " + name)
+	if (DataCollector.user_id > 0):
+		id_edit.text = str(DataCollector.user_id)
 
 
 func _on_wipe_data_pressed() -> void:
