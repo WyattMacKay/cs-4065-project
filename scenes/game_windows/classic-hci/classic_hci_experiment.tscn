@@ -1,18 +1,50 @@
 [gd_scene format=3 uid="uid://bnl4csxdjuaca"]
 
 [ext_resource type="Script" uid="uid://dr17evidohk5v" path="res://scenes/game_windows/game_scene.gd" id="1_n6yvg"]
+[ext_resource type="PackedScene" uid="uid://dxxqi76jtltq4" path="res://scenes/targets/hci_target/hci_target.tscn" id="2_6ntgi"]
 [ext_resource type="PackedScene" uid="uid://pyreayxgdqvo" path="res://scenes/custom_timer/custom_timer.tscn" id="2_24hk5"]
 
-[node name="ClassicHCIExperiment" type="Node" unique_id=835768049 node_paths=PackedStringArray("timer_display")]
+[node name="ClassicHCIExperiment" type="Node" unique_id=835768049 node_paths=PackedStringArray("timer_display", "all_targets")]
 script = ExtResource("1_n6yvg")
 collection_method = "Classic HCI"
 timer_display = NodePath("Time")
+all_targets = [NodePath("Targets/HCITarget"), NodePath("Targets/HCITarget2"), NodePath("Targets/HCITarget3"), NodePath("Targets/HCITarget4"), NodePath("Targets/HCITarget5"), NodePath("Targets/HCITarget6"), NodePath("Targets/HCITarget7"), NodePath("Targets/HCITarget8"), NodePath("Targets/HCITarget9")]
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=2086999474]
 offset_right = 320.0
 offset_bottom = 480.0
+mouse_filter = 2
 color = Color(0.16078432, 0.3647059, 0.5411765, 1)
 metadata/_edit_lock_ = true
+
+[node name="Targets" type="Node2D" parent="." unique_id=182855594]
+
+[node name="HCITarget" parent="Targets" unique_id=112583894 instance=ExtResource("2_6ntgi")]
+position = Vector2(64, 153)
+
+[node name="HCITarget2" parent="Targets" unique_id=1373080057 instance=ExtResource("2_6ntgi")]
+position = Vector2(161, 153)
+
+[node name="HCITarget3" parent="Targets" unique_id=1310232971 instance=ExtResource("2_6ntgi")]
+position = Vector2(258, 153)
+
+[node name="HCITarget4" parent="Targets" unique_id=1406421232 instance=ExtResource("2_6ntgi")]
+position = Vector2(64, 251)
+
+[node name="HCITarget5" parent="Targets" unique_id=1736502276 instance=ExtResource("2_6ntgi")]
+position = Vector2(161, 251)
+
+[node name="HCITarget6" parent="Targets" unique_id=1766984014 instance=ExtResource("2_6ntgi")]
+position = Vector2(258, 251)
+
+[node name="HCITarget7" parent="Targets" unique_id=1170293665 instance=ExtResource("2_6ntgi")]
+position = Vector2(64, 347)
+
+[node name="HCITarget8" parent="Targets" unique_id=180054229 instance=ExtResource("2_6ntgi")]
+position = Vector2(161, 347)
+
+[node name="HCITarget9" parent="Targets" unique_id=1907457711 instance=ExtResource("2_6ntgi")]
+position = Vector2(258, 347)
 
 [node name="Panel" type="Panel" parent="." unique_id=180404316]
 offset_top = -1.0

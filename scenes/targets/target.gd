@@ -1,7 +1,8 @@
 @abstract
-extends AnimatedSprite2D
 
 class_name Target
+
+extends Node2D
 
 @export var audio_player: AudioStreamPlayer
 @export var appear_sound: AudioStream
@@ -54,10 +55,7 @@ func on_click() -> void:
 	is_hittable = false
 	target_hit.emit(self, Time.get_ticks_msec() - time_at_activation)
 	click_area.input_pickable = false
-
-
-@abstract
-func submerge() -> void
+	play_audio(click_sound)
 
 
 func on_missed_hit_opportunity() -> void:
