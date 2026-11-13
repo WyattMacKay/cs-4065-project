@@ -14,9 +14,6 @@ var time_at_activation: int
 signal target_hit(target: Target, time: int)
 signal inactive(target: Target)
 
-# TODO see if is_hittable can be removed
-# TODO rename on_missed_hit_opportunity
-
 
 func _ready() -> void:
 	assert(audio_player != null, "Audio Player is null in node " + name)

@@ -5,8 +5,6 @@ var test_mode := false
 
 const LOG_FILE := "user://game_data.csv"
 
-# TODO reset data
-
 var csv_header := PackedStringArray(
 	[
 		"User ID",
