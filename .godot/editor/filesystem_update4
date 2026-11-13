@@ -4,3 +4,7 @@ res://scenes/mole/mole_sprite.scn
 res://scenes/game_windows/main/main_window.tscn
 res://scenes/game_windows/main/main_window.gd
 res://scenes/game_windows/game_scene.gd
+res://scenes/game_windows/whacamole/whacamole.scn
+res://scenes/targets/target.gd
+res://scenes/targets/mole/mole_sprite.gd
+res://scenes/targets/mole/mole_sprite.scn
