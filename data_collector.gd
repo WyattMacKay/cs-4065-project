@@ -99,3 +99,7 @@ func _on_export_file_selected(
 
 	destination.store_string(csv_contents)
 	destination.close()
+
+
+func clear_data() -> void:
+	DirAccess.remove_absolute(LOG_FILE)

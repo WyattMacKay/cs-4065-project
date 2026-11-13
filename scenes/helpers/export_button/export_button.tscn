@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cbvynioyk24np" path="res://scenes/helpers/export_button/export_button.gd" id="1_t6nj1"]
 
-[node name="Control" type="Control" unique_id=818767218]
+[node name="ExportButton" type="Control" unique_id=818767218]
 layout_mode = 3
 anchor_right = 0.18400002
 anchor_bottom = 0.065000005
