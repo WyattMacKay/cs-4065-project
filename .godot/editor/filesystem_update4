@@ -1,2 +1,4 @@
-res://scenes/game_windows/whacamole/whacamole.scn
+res://scenes/custom_timer/custom_timer.tscn
+res://scenes/mole/mole_sprite.gd
 res://scenes/game_windows/game_scene.gd
+res://scenes/mole/mole_sprite.scn

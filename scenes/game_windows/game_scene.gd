@@ -11,8 +11,9 @@ extends Node
 # TODO count misses
 # TODO get click speed
 # TODO mobile data collection
-# TODO mobile export
 # TODO use a set seed
+# TODO randomize spawn rate
+# TODO add music to mole game
 
 var inactive_targets: Array[Target] = []
 

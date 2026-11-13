@@ -5,6 +5,10 @@ extends AnimatedSprite2D
 
 class_name Target
 
+@export var audio_player: AudioStreamPlayer
+@export var appear_sound: AudioStream
+@export var click_sound: AudioStream
+
 var is_moving := false
 var is_hittable := false
 
@@ -21,6 +25,9 @@ const TWEEN_TIME: float = 0.1
 
 
 func _ready():
+	assert(audio_player != null, "Audio Player is null in node " + name)
+	assert(appear_sound != null, "Audio Player is null in node " + name)
+	assert(click_sound != null, "Audio Player is null in node " + name)
 	original_pos = position
 	destination_pos = Vector2(original_pos.x, original_pos.y - 60)
 	set_process_input(true)
@@ -43,7 +50,7 @@ func on_click():
 	reset_tween()
 
 	tween.tween_callback(submerge).set_delay(DELAY)
-
+	play_audio(click_sound)
 	get_node("anim").play("die")
 	target_hit.emit(self)
 
@@ -58,6 +65,7 @@ func emerge():
 	tween.tween_property(self, "position", destination_pos, TWEEN_TIME) \
 	.set_trans(Tween.TRANS_LINEAR) \
 	.set_ease(Tween.EASE_IN)
+	play_stimulus()
 
 
 func submerge():
@@ -83,6 +91,18 @@ func end_tween() -> void:
 func reset_tween() -> void:
 	end_tween()
 	tween = create_tween()
+
+
+func play_stimulus() -> void:
+	const DURATION_MS := 100
+	const AMPLITUDE := 0.25
+	Input.vibrate_handheld(DURATION_MS, AMPLITUDE)
+	play_audio(appear_sound)
+
+
+func play_audio(audio: AudioStream):
+	audio_player.stream = audio
+	audio_player.play()
 
 
 func _on_area_2d_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
