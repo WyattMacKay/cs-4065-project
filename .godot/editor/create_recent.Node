@@ -1,6 +1,7 @@
+LineEdit
 Button
+ColorRect
 CollisionShape2D
 Area2D
 AudioStreamPlayer
-ColorRect
 Control

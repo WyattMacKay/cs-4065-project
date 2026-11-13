@@ -1,0 +1,68 @@
+[gd_scene format=3 uid="uid://dmyem74ewxcuc"]
+
+[ext_resource type="PackedScene" uid="uid://ce1xxh61si2cf" path="res://scenes/helpers/export_button/export_button.tscn" id="1_mjx64"]
+[ext_resource type="Script" uid="uid://70etpfrwhmag" path="res://scenes/game_windows/main/main_window.gd" id="1_w4uav"]
+[ext_resource type="PackedScene" uid="uid://b1rw02nqh3lgj" path="res://scenes/game_windows/whacamole/whacamole.scn" id="2_dqhrp"]
+
+[node name="MainWindow" type="Control" unique_id=359813338 node_paths=PackedStringArray("id_edit")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_w4uav")
+whacamole_scene = ExtResource("2_dqhrp")
+id_edit = NodePath("LineEdit")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=837683189]
+layout_mode = 0
+offset_right = 320.0
+offset_bottom = 480.0
+color = Color(0.16078432, 0.3647059, 0.5411765, 1)
+metadata/_edit_lock_ = true
+
+[node name="ExportButton" parent="." unique_id=818767218 instance=ExtResource("1_mjx64")]
+layout_mode = 1
+offset_left = 4.0
+offset_top = 7.0
+offset_right = 4.119995
+offset_bottom = 6.7999935
+
+[node name="HCIButton" type="Button" parent="." unique_id=1236190730]
+layout_mode = 0
+offset_left = 102.0
+offset_top = 251.0
+offset_right = 219.0
+offset_bottom = 298.0
+pivot_offset = Vector2(42, 16)
+text = "Method A"
+
+[node name="WhacAMoleButton" type="Button" parent="." unique_id=1248575860]
+layout_mode = 0
+offset_left = 100.258064
+offset_top = 326.0
+offset_right = 220.74194
+offset_bottom = 371.0
+pivot_offset = Vector2(42, 16)
+text = "Method B"
+
+[node name="WipeData" type="Button" parent="." unique_id=1578430870]
+layout_mode = 0
+offset_left = 226.0
+offset_top = 8.0
+offset_right = 314.0
+offset_bottom = 39.0
+text = "Wipe Data"
+
+[node name="LineEdit" type="LineEdit" parent="." unique_id=749991183]
+layout_mode = 0
+offset_left = 91.0
+offset_top = 116.0
+offset_right = 222.0
+offset_bottom = 147.0
+placeholder_text = "ID"
+
+[connection signal="pressed" from="HCIButton" to="." method="_on_hci_button_pressed"]
+[connection signal="pressed" from="WhacAMoleButton" to="." method="_on_whac_a_mole_button_pressed"]
+[connection signal="pressed" from="WipeData" to="." method="_on_wipe_data_pressed"]

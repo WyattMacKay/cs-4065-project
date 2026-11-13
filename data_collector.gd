@@ -1,5 +1,7 @@
 extends Node
 
+var user_id = -1
+
 const LOG_FILE := "user://game_data.csv"
 
 # TODO reset data
@@ -52,7 +54,9 @@ func append_data(
 
 	f.seek_end()
 	f.store_csv_line(
-		PackedStringArray([collection_method, trial_number, trial_location, misclicks, time])
+		PackedStringArray(
+			[user_id, collection_method, trial_number, trial_location, misclicks, time]
+		)
 	)
 
 	f.flush()
@@ -99,3 +103,7 @@ func _on_export_file_selected(
 
 	destination.store_string(csv_contents)
 	destination.close()
+
+
+func clear_data() -> void:
+	DirAccess.remove_absolute(LOG_FILE)
