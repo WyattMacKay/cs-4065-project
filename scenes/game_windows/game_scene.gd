@@ -3,8 +3,7 @@ extends Node
 @export var timer_display: CustomTimer
 @export var all_targets: Array[Target] = []
 
-# TODO count misses
-# TODO get click speed
+# TODO implement all data collection
 # TODO mobile data collection
 # TODO add music to mole game
 
@@ -43,16 +42,11 @@ func _ready():
 	set_process(true)
 
 
-func _process(_delta):
-	if (Input.is_action_pressed("ui_cancel")):
-		get_tree().quit()
-
-
-func _on_hit(_obj: Target):
+func _on_hit(_obj: Target, time: int):
 	score += 1
 	update_score()
 
-	print("# misclicks: ", misclick_counter)
+	print("# misclicks: %d, time taken: %d" % [misclick_counter, time])
 	misclick_counter = -1
 
 
@@ -144,3 +138,5 @@ func _unhandled_input(event: InputEvent) -> void:
 		and event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed()
 	):
 		misclick_counter += 1
+	elif (Input.is_action_pressed("ui_cancel")):
+		get_tree().quit()

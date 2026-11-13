@@ -15,11 +15,16 @@ var destination_pos: Vector2
 
 var tween: Tween
 
-signal target_hit(mole: Target)
+var time_at_activation: int
+
+signal target_hit(mole: Target, time: int)
 signal inactive(mole: Target)
 
 const DELAY: float = 0.3
 const TWEEN_TIME: float = 0.1
+
+# TODO see if is_hittable can be removed
+# TODO rename on_missed_hit_opportunity
 
 
 func _ready():
@@ -43,19 +48,6 @@ func gameover():
 	end_tween()
 
 
-func on_click():
-	if !is_hittable:
-		return
-	is_hittable = false
-	reset_tween()
-
-	tween.tween_callback(submerge).set_delay(DELAY)
-	play_audio(click_sound)
-	get_node("anim").play("die")
-	target_hit.emit(self)
-	click_area.input_pickable = false
-
-
 func emerge():
 	reset_tween()
 
@@ -66,8 +58,24 @@ func emerge():
 	tween.tween_property(self, "position", destination_pos, TWEEN_TIME) \
 			.set_trans(Tween.TRANS_LINEAR) \
 			.set_ease(Tween.EASE_IN)
+
 	play_stimulus()
 	click_area.input_pickable = true
+	time_at_activation = Time.get_ticks_msec()
+
+
+func on_click():
+	if !is_hittable:
+		return
+
+	is_hittable = false
+	reset_tween()
+
+	tween.tween_callback(submerge).set_delay(DELAY)
+	play_audio(click_sound)
+	get_node("anim").play("die")
+	target_hit.emit(self, Time.get_ticks_msec() - time_at_activation)
+	click_area.input_pickable = false
 
 
 func submerge():
@@ -77,6 +85,7 @@ func submerge():
 			.set_delay(DELAY) \
 			.set_trans(Tween.TRANS_LINEAR) \
 			.set_ease(Tween.EASE_IN)
+
 	tween.tween_callback(on_missed_hit_opportunity)
 
 
