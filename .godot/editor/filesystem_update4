@@ -4,3 +4,5 @@ res://scenes/game_windows/classic-hci/classic_hci_experiment.tscn
 res://scenes/targets/hci_target/hci_target.tscn
 res://scenes/targets/hci_target/hci_target.gd
 res://scenes/targets/target.gd
+res://scenes/game_windows/whacamole/whacamole.scn
+res://scenes/game_windows/game_scene.gd

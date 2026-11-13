@@ -11,7 +11,6 @@ var score: int = 0
 var save_file := "user://savedata.bin"
 var score_str: String
 var maxscore_str: String
-var tween: Tween
 
 var misclick_counter := -1
 var trial_count := 0
@@ -52,10 +51,11 @@ func _on_hit(obj: Target, time: int):
 
 func _on_inactive(obj: Target):
 	inactive_targets.append(obj)
+	if (timer_display.timer.is_stopped() and inactive_targets.size() == all_targets.size()):
+		gameover()
 
 
 func gameover():
-	end_tween()
 	get_node("Panel").show()
 	spawn_timer.stop()
 	for target: Target in all_targets:
@@ -77,16 +77,6 @@ func emerge_random_target():
 
 func update_score() -> void:
 	get_node("score").set_text("Score: " + str(score))
-
-
-func end_tween() -> void:
-	if tween and tween.is_valid():
-		tween.kill()
-
-
-func reset_tween() -> void:
-	end_tween()
-	tween = create_tween()
 
 
 func _on_start_button_pressed() -> void:
@@ -112,7 +102,7 @@ func reset_game_timer() -> void:
 	add_child(new_timer)
 	new_timer.one_shot = true
 	new_timer.start(EXPERIMENT_DURATION)
-	new_timer.timeout.connect(gameover)
+	new_timer.timeout.connect(spawn_timer.stop)
 	timer_display.timer = new_timer
 
 
