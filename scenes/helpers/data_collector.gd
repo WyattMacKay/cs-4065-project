@@ -1,10 +1,9 @@
 extends Node
 
-var user_id = -1
+var user_id := -1
+var test_mode := false
 
 const LOG_FILE := "user://game_data.csv"
-
-# TODO reset data
 
 var csv_header := PackedStringArray(
 	[
@@ -25,6 +24,9 @@ func append_data(
 	misclicks: int,
 	time: int,
 ):
+	if test_mode:
+		return
+
 	var f: FileAccess
 
 	if FileAccess.file_exists(LOG_FILE):

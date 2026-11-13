@@ -3,6 +3,16 @@ extends Control
 @export var whacamole_scene: PackedScene
 @export var hci_scene: PackedScene
 @export var id_edit: LineEdit
+@export var test_checkbox: CheckBox
+
+
+func _ready() -> void:
+	assert(whacamole_scene != null, "Export variable Whacamole Scene missing in " + name)
+	assert(whacamole_scene != null, "Export variable HCI Scene missing in " + name)
+	assert(whacamole_scene != null, "Export variable ID Edit missing in " + name)
+	assert(whacamole_scene != null, "Export variable Test Checkbox missing in " + name)
+	if (DataCollector.user_id > 0):
+		id_edit.text = str(DataCollector.user_id)
 
 
 func _on_wipe_data_pressed() -> void:
@@ -21,11 +31,12 @@ func _on_whac_a_mole_button_pressed() -> void:
 
 
 func _on_hci_button_pressed() -> void:
-	pass # Replace with function body.
+	set_scene(hci_scene)
 
 
 func set_scene(scene: PackedScene):
-	if id_edit.text.is_empty() or !id_edit.text.is_valid_int():
+	if !test_checkbox.button_pressed and (id_edit.text.is_empty() or !id_edit.text.is_valid_int()):
 		return
+	DataCollector.test_mode = test_checkbox.button_pressed
 	DataCollector.user_id = id_edit.text.to_int()
 	get_tree().change_scene_to_packed(scene)

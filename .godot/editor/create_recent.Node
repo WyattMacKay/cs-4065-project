@@ -1,6 +1,13 @@
+Panel
+Label
+CheckBox
+Node2D
+AudioStreamPlayer2D
+AnimatedSprite2D
+ColorRect
+Node
 LineEdit
 Button
-ColorRect
 CollisionShape2D
 Area2D
 AudioStreamPlayer

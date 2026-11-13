@@ -1,10 +1,9 @@
-res://scenes/custom_timer/custom_timer.tscn
-res://scenes/mole/mole_sprite.gd
-res://scenes/game_windows/game_scene.gd
-res://scenes/mole/mole_sprite.scn
 res://scenes/game_windows/whacamole/whacamole.scn
-res://data_collector.gd
-res://scenes/helpers/export_button/export_button.tscn
-res://scenes/helpers/export_button/export_button.gd
+res://scenes/game_windows/game_scene.gd
+res://scenes/game_windows/classic-hci/classic_hci_experiment.tscn
+res://scenes/targets/hci_target/hci_target.tscn
 res://scenes/game_windows/main/main_window.tscn
 res://scenes/game_windows/main/main_window.gd
+res://scenes/targets/target.gd
+res://scenes/helpers/data_collector.gd
+res://scenes/targets/mole/mole_sprite.gd
