@@ -1,10 +1,8 @@
 extends Node
 
+@export var collection_method: String
 @export var timer_display: CustomTimer
 @export var all_targets: Array[Target] = []
-
-# TODO implement all data collection
-# TODO add music to mole game
 
 var inactive_targets: Array[Target] = []
 
@@ -16,6 +14,7 @@ var maxscore_str: String
 var tween: Tween
 
 var misclick_counter := -1
+var trial_count := 0
 
 const DAMAGE := 25
 const SPAWN_SPEED_FLOOR := 2.0 # Time between spawns in seconds
@@ -30,7 +29,7 @@ func _ready():
 		target.connect("target_hit", _on_hit)
 		target.connect("inactive", _on_inactive)
 
-	inactive_targets = all_targets
+	inactive_targets = all_targets.duplicate()
 	update_score()
 
 	spawn_timer = Timer.new()
@@ -41,12 +40,13 @@ func _ready():
 	set_process(true)
 
 
-func _on_hit(_obj: Target, time: int):
+func _on_hit(obj: Target, time: int):
 	score += 1
 	update_score()
+	trial_count += 1
+	var trial_num: int = all_targets.find(obj) + 1
 
-	print("# misclicks: %d, time taken: %d" % [misclick_counter, time])
-	DataCollector.append_data(misclick_counter, time)
+	DataCollector.append_data(collection_method, trial_count, trial_num, misclick_counter, time)
 	misclick_counter = -1
 
 
@@ -95,6 +95,7 @@ func _on_start_button_pressed() -> void:
 	timer_display.start()
 	score = 0
 	misclick_counter = -1
+	trial_count = 0
 
 	for target: Target in all_targets:
 		target.gamestart()

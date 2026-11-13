@@ -2,6 +2,8 @@ extends Node
 
 const LOG_FILE := "user://game_data.csv"
 
+# TODO reset data
+
 var csv_header := PackedStringArray(
 	[
 		"User ID",
@@ -14,7 +16,13 @@ var csv_header := PackedStringArray(
 )
 
 
-func append_data(misclicks: int, time: int):
+func append_data(
+	collection_method: String,
+	trial_number: int,
+	trial_location: int,
+	misclicks: int,
+	time: int,
+):
 	var f: FileAccess
 
 	if FileAccess.file_exists(LOG_FILE):
@@ -43,7 +51,9 @@ func append_data(misclicks: int, time: int):
 		f.store_csv_line(csv_header)
 
 	f.seek_end()
-	f.store_csv_line(PackedStringArray([str(misclicks), str(time)]))
+	f.store_csv_line(
+		PackedStringArray([collection_method, trial_number, trial_location, misclicks, time])
+	)
 
 	f.flush()
 	f.close()
