@@ -6,8 +6,6 @@ extends Node
 @export var timer_display: CustomTimer
 @export var all_targets: Array[Target] = []
 
-# TODO play sound on click
-# TODO vibrate on click
 # TODO count misses
 # TODO get click speed
 # TODO mobile data collection
@@ -30,7 +28,7 @@ const EXPERIMENT_DURATION := 30
 
 
 func _ready():
-	randomize()
+	seed(232512020)
 
 	for target: Target in all_targets:
 		target.connect("target_hit", _on_hit)
