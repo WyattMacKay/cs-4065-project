@@ -64,8 +64,8 @@ func emerge():
 
 	get_node("anim").play("run")
 	tween.tween_property(self, "position", destination_pos, TWEEN_TIME) \
-	.set_trans(Tween.TRANS_LINEAR) \
-	.set_ease(Tween.EASE_IN)
+			.set_trans(Tween.TRANS_LINEAR) \
+			.set_ease(Tween.EASE_IN)
 	play_stimulus()
 	click_area.input_pickable = true
 
@@ -74,9 +74,9 @@ func submerge():
 	reset_tween()
 
 	tween.tween_property(self, "position", original_pos, TWEEN_TIME) \
-	.set_delay(DELAY) \
-	.set_trans(Tween.TRANS_LINEAR) \
-	.set_ease(Tween.EASE_IN)
+			.set_delay(DELAY) \
+			.set_trans(Tween.TRANS_LINEAR) \
+			.set_ease(Tween.EASE_IN)
 	tween.tween_callback(on_missed_hit_opportunity)
 
 
@@ -108,5 +108,8 @@ func play_audio(audio: AudioStream):
 
 
 func _on_area_2d_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
-	if (event is InputEventMouseButton):
+	if (
+		event is InputEventMouseButton
+		and event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed()
+	):
 		on_click()

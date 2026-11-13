@@ -17,6 +17,8 @@ var score_str: String
 var maxscore_str: String
 var tween: Tween
 
+var misclick_counter := -1
+
 const DAMAGE := 25
 const SPAWN_SPEED_FLOOR := 2.0 # Time between spawns in seconds
 const SPAWN_SEED_CEILING := 5.0
@@ -49,6 +51,9 @@ func _process(_delta):
 func _on_hit(_obj: Target):
 	score += 1
 	update_score()
+
+	print("# misclicks: ", misclick_counter)
+	misclick_counter = -1
 
 
 func _on_inactive(obj: Target):
@@ -112,6 +117,7 @@ func _on_start_button_pressed() -> void:
 	reset_game_timer()
 	timer_display.start()
 	score = 0
+	misclick_counter = -1
 
 	for target: Target in all_targets:
 		target.gamestart()
@@ -130,3 +136,11 @@ func reset_game_timer() -> void:
 	new_timer.start(EXPERIMENT_DURATION)
 	new_timer.timeout.connect(gameover)
 	timer_display.timer = new_timer
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if (
+		event is InputEventMouseButton
+		and event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed()
+	):
+		misclick_counter += 1
