@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://70etpfrwhmag" path="res://scenes/game_windows/main/main_window.gd" id="1_w4uav"]
 [ext_resource type="PackedScene" uid="uid://b1rw02nqh3lgj" path="res://scenes/game_windows/whacamole/whacamole.scn" id="2_dqhrp"]
 
-[node name="MainWindow" type="Control" unique_id=359813338]
+[node name="MainWindow" type="Control" unique_id=359813338 node_paths=PackedStringArray("id_edit")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -13,6 +13,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_w4uav")
 whacamole_scene = ExtResource("2_dqhrp")
+id_edit = NodePath("LineEdit")
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=837683189]
 layout_mode = 0
@@ -62,5 +63,6 @@ offset_right = 222.0
 offset_bottom = 147.0
 placeholder_text = "ID"
 
+[connection signal="pressed" from="HCIButton" to="." method="_on_hci_button_pressed"]
 [connection signal="pressed" from="WhacAMoleButton" to="." method="_on_whac_a_mole_button_pressed"]
 [connection signal="pressed" from="WipeData" to="." method="_on_wipe_data_pressed"]
