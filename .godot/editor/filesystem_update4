@@ -3,3 +3,6 @@ res://scenes/mole/mole_sprite.gd
 res://scenes/game_windows/game_scene.gd
 res://scenes/mole/mole_sprite.scn
 res://scenes/game_windows/whacamole/whacamole.scn
+res://data_collector.gd
+res://scenes/helpers/export_button/export_button.tscn
+res://scenes/helpers/export_button/export_button.gd

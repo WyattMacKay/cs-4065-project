@@ -25,6 +25,7 @@ const TWEEN_TIME: float = 0.1
 
 # TODO see if is_hittable can be removed
 # TODO rename on_missed_hit_opportunity
+# TODO gameover animation
 
 
 func _ready():

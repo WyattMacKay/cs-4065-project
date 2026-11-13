@@ -4,7 +4,6 @@ extends Node
 @export var all_targets: Array[Target] = []
 
 # TODO implement all data collection
-# TODO mobile data collection
 # TODO add music to mole game
 
 var inactive_targets: Array[Target] = []
@@ -47,6 +46,7 @@ func _on_hit(_obj: Target, time: int):
 	update_score()
 
 	print("# misclicks: %d, time taken: %d" % [misclick_counter, time])
+	DataCollector.append_data(misclick_counter, time)
 	misclick_counter = -1
 
 
@@ -77,23 +77,6 @@ func emerge_random_target():
 
 func update_score() -> void:
 	get_node("score").set_text("Score: " + str(score))
-
-# Commented out for future use in saving user data
-#func save():
-#var f: FileAccess = FileAccess.open_encrypted_with_pass(save_file, FileAccess.WRITE, "godot")
-#if (!f):
-#return
-#f.store_64(highscore)
-#f.close()
-#
-#
-#func read():
-#var v = 0
-#if FileAccess.file_exists(save_file):
-#var f := FileAccess.open_encrypted_with_pass(save_file, FileAccess.READ, "godot")
-#v = f.get_64()
-#f.close()
-#return v
 
 
 func end_tween() -> void:

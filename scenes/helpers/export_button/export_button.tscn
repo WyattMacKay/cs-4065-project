@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://ce1xxh61si2cf"]
+
+[ext_resource type="Script" uid="uid://cbvynioyk24np" path="res://scenes/helpers/export_button/export_button.gd" id="1_t6nj1"]
+
+[node name="Control" type="Control" unique_id=818767218]
+layout_mode = 3
+anchor_right = 0.18400002
+anchor_bottom = 0.065000005
+offset_right = 0.11999512
+offset_bottom = -0.20000267
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_t6nj1")
+
+[node name="Button" type="Button" parent="." unique_id=490415993]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+text = "Export"
+
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]

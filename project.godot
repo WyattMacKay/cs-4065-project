@@ -17,6 +17,10 @@ icon="res://icon.png"
 name="mole"
 main_scene=""
 
+[autoload]
+
+DataCollector="*uid://c6j505snejvu1"
+
 [display]
 
 window/size/viewport_width=320
