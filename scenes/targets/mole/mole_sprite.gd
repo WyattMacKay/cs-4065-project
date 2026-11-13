@@ -1,7 +1,5 @@
 extends Target
 
-# TODO gameover animation
-
 var original_pos: Vector2
 var destination_pos: Vector2
 var tween: Tween
@@ -23,13 +21,18 @@ func gamestart():
 
 func gameover():
 	end_tween()
-	# TODO make gameover animation
+	pop_up()
+	get_node("anim").play("die")
 
 
 func emerge():
 	super.emerge()
-	reset_tween()
 	get_node("anim").play("run")
+	pop_up()
+
+
+func pop_up() -> void:
+	reset_tween()
 	tween.tween_property(self, "position", destination_pos, TWEEN_TIME) \
 			.set_trans(Tween.TRANS_LINEAR) \
 			.set_ease(Tween.EASE_IN)

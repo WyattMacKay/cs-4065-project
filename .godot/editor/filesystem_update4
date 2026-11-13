@@ -6,3 +6,4 @@ res://scenes/game_windows/main/main_window.tscn
 res://scenes/game_windows/main/main_window.gd
 res://scenes/targets/target.gd
 res://scenes/helpers/data_collector.gd
+res://scenes/targets/mole/mole_sprite.gd
