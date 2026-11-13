@@ -1,6 +1,3 @@
-#https://github.com/lulersoft/godot_mole_game
-#Godot QQ Group: 302924317
-#Author:xiaolu (QQ2604904)
 extends AnimatedSprite2D
 
 class_name Target
@@ -8,6 +5,7 @@ class_name Target
 @export var audio_player: AudioStreamPlayer
 @export var appear_sound: AudioStream
 @export var click_sound: AudioStream
+@export var click_area: Area2D
 
 var is_moving := false
 var is_hittable := false
@@ -17,17 +15,24 @@ var destination_pos: Vector2
 
 var tween: Tween
 
-signal target_hit(mole: Target)
+var time_at_activation: int
+
+signal target_hit(mole: Target, time: int)
 signal inactive(mole: Target)
 
 const DELAY: float = 0.3
 const TWEEN_TIME: float = 0.1
+
+# TODO see if is_hittable can be removed
+# TODO rename on_missed_hit_opportunity
+# TODO gameover animation
 
 
 func _ready():
 	assert(audio_player != null, "Audio Player is null in node " + name)
 	assert(appear_sound != null, "Audio Player is null in node " + name)
 	assert(click_sound != null, "Audio Player is null in node " + name)
+	assert(click_area != null, "Click Area is null in node" + name)
 	original_pos = position
 	destination_pos = Vector2(original_pos.x, original_pos.y - 60)
 	set_process_input(true)
@@ -37,22 +42,11 @@ func gamestart():
 	is_hittable = false
 	is_moving = false
 	position = original_pos
+	click_area.input_pickable = false
 
 
 func gameover():
 	end_tween()
-
-
-func on_click():
-	if !is_hittable:
-		return
-	is_hittable = false
-	reset_tween()
-
-	tween.tween_callback(submerge).set_delay(DELAY)
-	play_audio(click_sound)
-	get_node("anim").play("die")
-	target_hit.emit(self)
 
 
 func emerge():
@@ -63,18 +57,36 @@ func emerge():
 
 	get_node("anim").play("run")
 	tween.tween_property(self, "position", destination_pos, TWEEN_TIME) \
-	.set_trans(Tween.TRANS_LINEAR) \
-	.set_ease(Tween.EASE_IN)
+			.set_trans(Tween.TRANS_LINEAR) \
+			.set_ease(Tween.EASE_IN)
+
 	play_stimulus()
+	click_area.input_pickable = true
+	time_at_activation = Time.get_ticks_msec()
+
+
+func on_click():
+	if !is_hittable:
+		return
+
+	is_hittable = false
+	reset_tween()
+
+	tween.tween_callback(submerge).set_delay(DELAY)
+	play_audio(click_sound)
+	get_node("anim").play("die")
+	target_hit.emit(self, Time.get_ticks_msec() - time_at_activation)
+	click_area.input_pickable = false
 
 
 func submerge():
 	reset_tween()
 
 	tween.tween_property(self, "position", original_pos, TWEEN_TIME) \
-	.set_delay(DELAY) \
-	.set_trans(Tween.TRANS_LINEAR) \
-	.set_ease(Tween.EASE_IN)
+			.set_delay(DELAY) \
+			.set_trans(Tween.TRANS_LINEAR) \
+			.set_ease(Tween.EASE_IN)
+
 	tween.tween_callback(on_missed_hit_opportunity)
 
 
@@ -106,5 +118,8 @@ func play_audio(audio: AudioStream):
 
 
 func _on_area_2d_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
-	if (event is InputEventMouseButton):
+	if (
+		event is InputEventMouseButton
+		and event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed()
+	):
 		on_click()

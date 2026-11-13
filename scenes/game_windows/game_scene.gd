@@ -1,62 +1,53 @@
-#https://github.com/lulersoft/godot_mole_game
-#Godot QQ Group: 302924317
-#Author:xiaolu (QQ2604904)
 extends Node
 
+@export var collection_method: String
 @export var timer_display: CustomTimer
 @export var all_targets: Array[Target] = []
 
-# TODO play sound on click
-# TODO vibrate on click
-# TODO count misses
-# TODO get click speed
-# TODO mobile data collection
-# TODO use a set seed
-# TODO randomize spawn rate
-# TODO add music to mole game
-
 var inactive_targets: Array[Target] = []
 
-var timer: Timer
+var spawn_timer: Timer
 var score: int = 0
 var save_file := "user://savedata.bin"
 var score_str: String
 var maxscore_str: String
 var tween: Tween
 
+var misclick_counter := -1
+var trial_count := 0
+
 const DAMAGE := 25
-const SPAWN_SPEED := .75 # Time between spawns in seconds
+const SPAWN_SPEED_FLOOR := 2.0 # Time between spawns in seconds
+const SPAWN_SEED_CEILING := 5.0
 const EXPERIMENT_DURATION := 30
 
 
 func _ready():
-	randomize()
+	seed(232512020)
 
 	for target: Target in all_targets:
 		target.connect("target_hit", _on_hit)
 		target.connect("inactive", _on_inactive)
 
-	inactive_targets = all_targets
-
+	inactive_targets = all_targets.duplicate()
 	update_score()
 
-	timer = Timer.new()
-	timer.connect("timeout", Callable(self, "_on_timer_timeout"))
-	timer.set_one_shot(false)
-	timer.set_wait_time(SPAWN_SPEED)
+	spawn_timer = Timer.new()
+	spawn_timer.connect("timeout", Callable(self, "_on_timer_timeout"))
+	spawn_timer.set_one_shot(false)
 
-	add_child(timer)
+	add_child(spawn_timer)
 	set_process(true)
 
 
-func _process(_delta):
-	if (Input.is_action_pressed("ui_cancel")):
-		get_tree().quit()
-
-
-func _on_hit(_obj: Target):
+func _on_hit(obj: Target, time: int):
 	score += 1
 	update_score()
+	trial_count += 1
+	var trial_num: int = all_targets.find(obj) + 1
+
+	DataCollector.append_data(collection_method, trial_count, trial_num, misclick_counter, time)
+	misclick_counter = -1
 
 
 func _on_inactive(obj: Target):
@@ -66,7 +57,7 @@ func _on_inactive(obj: Target):
 func gameover():
 	end_tween()
 	get_node("Panel").show()
-	timer.stop()
+	spawn_timer.stop()
 	for target: Target in all_targets:
 		target.gameover()
 
@@ -87,23 +78,6 @@ func emerge_random_target():
 func update_score() -> void:
 	get_node("score").set_text("Score: " + str(score))
 
-# Commented out for future use in saving user data
-#func save():
-#var f: FileAccess = FileAccess.open_encrypted_with_pass(save_file, FileAccess.WRITE, "godot")
-#if (!f):
-#return
-#f.store_64(highscore)
-#f.close()
-#
-#
-#func read():
-#var v = 0
-#if FileAccess.file_exists(save_file):
-#var f := FileAccess.open_encrypted_with_pass(save_file, FileAccess.READ, "godot")
-#v = f.get_64()
-#f.close()
-#return v
-
 
 func end_tween() -> void:
 	if tween and tween.is_valid():
@@ -120,12 +94,17 @@ func _on_start_button_pressed() -> void:
 	reset_game_timer()
 	timer_display.start()
 	score = 0
+	misclick_counter = -1
+	trial_count = 0
 
 	for target: Target in all_targets:
 		target.gamestart()
+	reset_spawn_timer()
 
-	timer.set_wait_time(SPAWN_SPEED)
-	timer.start()
+
+func reset_spawn_timer() -> void:
+	var wait_time = randf() * (SPAWN_SEED_CEILING - SPAWN_SPEED_FLOOR) + SPAWN_SPEED_FLOOR
+	spawn_timer.start(wait_time)
 
 
 func reset_game_timer() -> void:
@@ -135,3 +114,13 @@ func reset_game_timer() -> void:
 	new_timer.start(EXPERIMENT_DURATION)
 	new_timer.timeout.connect(gameover)
 	timer_display.timer = new_timer
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if (
+		event is InputEventMouseButton
+		and event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed()
+	):
+		misclick_counter += 1
+	elif (Input.is_action_pressed("ui_cancel")):
+		get_tree().quit()
