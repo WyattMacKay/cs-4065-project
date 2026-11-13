@@ -4,11 +4,12 @@
 [ext_resource type="PackedScene" uid="uid://dxxqi76jtltq4" path="res://scenes/targets/hci_target/hci_target.tscn" id="2_6ntgi"]
 [ext_resource type="PackedScene" uid="uid://pyreayxgdqvo" path="res://scenes/custom_timer/custom_timer.tscn" id="2_24hk5"]
 
-[node name="ClassicHCIExperiment" type="Node" unique_id=835768049 node_paths=PackedStringArray("timer_display", "all_targets")]
+[node name="ClassicHCIExperiment" type="Node" unique_id=835768049 node_paths=PackedStringArray("timer_display", "all_targets", "end_panel")]
 script = ExtResource("1_n6yvg")
 collection_method = "Classic HCI"
 timer_display = NodePath("Time")
 all_targets = [NodePath("Targets/HCITarget"), NodePath("Targets/HCITarget2"), NodePath("Targets/HCITarget3"), NodePath("Targets/HCITarget4"), NodePath("Targets/HCITarget5"), NodePath("Targets/HCITarget6"), NodePath("Targets/HCITarget7"), NodePath("Targets/HCITarget8"), NodePath("Targets/HCITarget9")]
+end_panel = NodePath("EndPanel")
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=2086999474]
 offset_right = 320.0
@@ -47,7 +48,9 @@ position = Vector2(161, 347)
 position = Vector2(258, 347)
 
 [node name="Panel" type="Panel" parent="." unique_id=180404316]
+offset_left = -3.0
 offset_top = -1.0
+offset_right = -3.0
 offset_bottom = -1.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
@@ -71,9 +74,9 @@ size_flags_vertical = 2
 text = "START"
 
 [node name="score" type="Label" parent="." unique_id=1156222803]
-offset_left = 556.0
+offset_left = 553.0
 offset_top = 96.0
-offset_right = 635.0
+offset_right = 632.0
 offset_bottom = 119.0
 size_flags_horizontal = 2
 size_flags_vertical = 0
@@ -82,10 +85,37 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Time" parent="." unique_id=869313044 instance=ExtResource("2_24hk5")]
-offset_left = 39.0
+offset_left = 36.0
 offset_top = 426.00003
-offset_right = 239.0
+offset_right = 236.0
 offset_bottom = 466.00003
 scale = Vector2(1.2336886, 0.3596732)
 
+[node name="EndPanel" type="Panel" parent="." unique_id=1244100968]
+offset_left = -3.0
+offset_top = -1.0
+offset_right = -3.0
+offset_bottom = -1.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="EndPanel" unique_id=1822149383]
+layout_mode = 0
+offset_left = 122.0
+offset_top = 218.0
+offset_right = 203.45
+offset_bottom = 258.0
+color = Color(0.26973, 0.81, 0.105299994, 1)
+
+[node name="ReturnButton" type="Button" parent="EndPanel" unique_id=1371152101]
+layout_mode = 0
+offset_left = 127.0
+offset_top = 223.0
+offset_right = 198.0
+offset_bottom = 254.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "RETURN"
+
 [connection signal="pressed" from="Panel/startButton" to="." method="_on_start_button_pressed"]
+[connection signal="pressed" from="EndPanel/ReturnButton" to="." method="_on_return_button_pressed"]

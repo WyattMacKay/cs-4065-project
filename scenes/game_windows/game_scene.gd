@@ -3,22 +3,22 @@ extends Node
 @export var collection_method: String
 @export var timer_display: CustomTimer
 @export var all_targets: Array[Target] = []
+@export var end_panel: Panel
 
 var inactive_targets: Array[Target] = []
 
 var spawn_timer: Timer
 var score: int = 0
-var save_file := "user://savedata.bin"
 var score_str: String
 var maxscore_str: String
 
 var misclick_counter := -1
 var trial_count := 0
 
-const DAMAGE := 25
 const SPAWN_SPEED_FLOOR := 2.0 # Time between spawns in seconds
 const SPAWN_SEED_CEILING := 5.0
-const EXPERIMENT_DURATION := 30
+const EXPERIMENT_DURATION := 10 # Entire experiment time in seconds
+const MAIN_MENU := "res://scenes/game_windows/main/main_window.tscn"
 
 
 func _ready():
@@ -35,6 +35,7 @@ func _ready():
 	spawn_timer.connect("timeout", Callable(self, "_on_timer_timeout"))
 	spawn_timer.set_one_shot(false)
 
+	end_panel.hide()
 	add_child(spawn_timer)
 	set_process(true)
 
@@ -51,15 +52,19 @@ func _on_hit(obj: Target, time: int):
 
 func _on_inactive(obj: Target):
 	inactive_targets.append(obj)
+	check_if_complete()
+
+
+func check_if_complete() -> void:
 	if (timer_display.timer.is_stopped() and inactive_targets.size() == all_targets.size()):
 		gameover()
 
 
 func gameover():
-	get_node("Panel").show()
 	spawn_timer.stop()
 	for target: Target in all_targets:
 		target.gameover()
+	end_panel.show()
 
 
 func _on_timer_timeout():
@@ -103,6 +108,7 @@ func reset_game_timer() -> void:
 	new_timer.one_shot = true
 	new_timer.start(EXPERIMENT_DURATION)
 	new_timer.timeout.connect(spawn_timer.stop)
+	new_timer.timeout.connect(check_if_complete)
 	timer_display.timer = new_timer
 
 
@@ -114,3 +120,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		misclick_counter += 1
 	elif (Input.is_action_pressed("ui_cancel")):
 		get_tree().quit()
+
+
+func _on_return_button_pressed() -> void:
+	get_tree().change_scene_to_file(MAIN_MENU)
