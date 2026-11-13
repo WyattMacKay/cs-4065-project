@@ -24,6 +24,7 @@ func _ready() -> void:
 	assert(click_sound != null, "Audio Player is null in node " + name)
 	assert(click_area != null, "Click Area is null in node" + name)
 	set_process_input(true)
+	click_area.input_pickable = false
 
 
 func gamestart() -> void:
