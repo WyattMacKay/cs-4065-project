@@ -21,7 +21,7 @@ func _on_whac_a_mole_button_pressed() -> void:
 
 
 func _on_hci_button_pressed() -> void:
-	pass # Replace with function body.
+	set_scene(hci_scene)
 
 
 func set_scene(scene: PackedScene):
