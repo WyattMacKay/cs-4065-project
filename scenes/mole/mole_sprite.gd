@@ -5,6 +5,7 @@ class_name Target
 @export var audio_player: AudioStreamPlayer
 @export var appear_sound: AudioStream
 @export var click_sound: AudioStream
+@export var click_area: Area2D
 
 var is_moving := false
 var is_hittable := false
@@ -25,6 +26,7 @@ func _ready():
 	assert(audio_player != null, "Audio Player is null in node " + name)
 	assert(appear_sound != null, "Audio Player is null in node " + name)
 	assert(click_sound != null, "Audio Player is null in node " + name)
+	assert(click_area != null, "Click Area is null in node" + name)
 	original_pos = position
 	destination_pos = Vector2(original_pos.x, original_pos.y - 60)
 	set_process_input(true)
@@ -34,6 +36,7 @@ func gamestart():
 	is_hittable = false
 	is_moving = false
 	position = original_pos
+	click_area.input_pickable = false
 
 
 func gameover():
@@ -50,6 +53,7 @@ func on_click():
 	play_audio(click_sound)
 	get_node("anim").play("die")
 	target_hit.emit(self)
+	click_area.input_pickable = false
 
 
 func emerge():
@@ -63,6 +67,7 @@ func emerge():
 	.set_trans(Tween.TRANS_LINEAR) \
 	.set_ease(Tween.EASE_IN)
 	play_stimulus()
+	click_area.input_pickable = true
 
 
 func submerge():
