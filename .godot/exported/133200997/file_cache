@@ -1,3 +1,6 @@
 res://addons/GDQuest_GDScript_formatter/editor/quick_setup_window.tscn::d3067d002bfcea8f98ccf58356b1eb31::1794464751::res://.godot/exported/133200997/export-445e9abf910ade2fa4a70ee46ba246b0-quick_setup_window.scn
-res://scenes/custom_timer/custom_timer.tscn::2cdfc2aeb5385437c219eac72426d978::1794545652::res://.godot/exported/133200997/export-9312ecbfefd4080fedae268326fd4918-custom_timer.scn
-res://scenes/helpers/export_button/export_button.tscn::5e64294c2d108569dfbd3c4298642b3b::1794545849::res://.godot/exported/133200997/export-377b0d545a7c77fdb8a60c01b896a75d-export_button.scn
+res://scenes/custom_timer/custom_timer.tscn::f0087526be5610914376950a77039eb1::1794586380::res://.godot/exported/133200997/export-9312ecbfefd4080fedae268326fd4918-custom_timer.scn
+res://scenes/helpers/export_button/export_button.tscn::81594a947600b7e42c54086128ea98a0::1794551900::res://.godot/exported/133200997/export-377b0d545a7c77fdb8a60c01b896a75d-export_button.scn
+res://scenes/game_windows/classic-hci/classic_hci_experiment.tscn::397b1a92e102da2a0516c4985cd371d8::1794856996::res://.godot/exported/133200997/export-8b548cd86b89c6ce5480d6a264841d2c-classic_hci_experiment.scn
+res://scenes/game_windows/main/main_window.tscn::d9be1fc135393cf5bd62edf670eb13a7::1794857059::res://.godot/exported/133200997/export-d9948ed9718e33bd850226f6bd4817af-main_window.scn
+res://scenes/targets/hci_target/hci_target.tscn::4d8866ed954c94f58487947209e7a89e::1794603517::res://.godot/exported/133200997/export-743538e2c73b879bc27cd18237422ac5-hci_target.scn

@@ -35,8 +35,18 @@ func _on_hci_button_pressed() -> void:
 
 
 func set_scene(scene: PackedScene):
-	if !test_checkbox.button_pressed and (id_edit.text.is_empty() or !id_edit.text.is_valid_int()):
+	const STUDY_DURATION := 300
+	const STUDY_SEED := 232512020
+	const TEST_DURATION := 30
+	const TEST_SEED := 7357
+	var is_test = test_checkbox.button_pressed
+	if !is_test and (id_edit.text.is_empty() or !id_edit.text.is_valid_int()):
 		return
-	DataCollector.test_mode = test_checkbox.button_pressed
+	if (!scene.can_instantiate()):
+		return
+	var scene_instance: StudyScreen = scene.instantiate()
+	scene_instance.experiment_duration = STUDY_DURATION if (!is_test) else TEST_DURATION
+	scene_instance.rand_seed = STUDY_SEED if (!is_test) else TEST_SEED
+	DataCollector.test_mode = is_test
 	DataCollector.user_id = id_edit.text.to_int()
-	get_tree().change_scene_to_packed(scene)
+	get_tree().change_scene_to_node(scene_instance)
