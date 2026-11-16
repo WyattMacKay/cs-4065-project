@@ -1,9 +1,12 @@
+class_name StudyScreen
 extends Node
 
 @export var collection_method: String
 @export var timer_display: CustomTimer
 @export var all_targets: Array[Target] = []
 @export var end_panel: Panel
+@export var experiment_duration := 300 # Entire experiment time in seconds
+@export var rand_seed := 232512020
 
 var inactive_targets: Array[Target] = []
 
@@ -17,12 +20,11 @@ var trial_count := 0
 
 const SPAWN_SPEED_FLOOR := 2.0 # Time between spawns in seconds
 const SPAWN_SEED_CEILING := 5.0
-const EXPERIMENT_DURATION := 300 # Entire experiment time in seconds
 const MAIN_MENU := "res://scenes/game_windows/main/main_window.tscn"
 
 
 func _ready():
-	seed(232512020)
+	seed(rand_seed)
 
 	for target: Target in all_targets:
 		target.connect("target_hit", _on_hit)
@@ -106,7 +108,7 @@ func reset_game_timer() -> void:
 	var new_timer := Timer.new()
 	add_child(new_timer)
 	new_timer.one_shot = true
-	new_timer.start(EXPERIMENT_DURATION)
+	new_timer.start(experiment_duration)
 	new_timer.timeout.connect(spawn_timer.stop)
 	new_timer.timeout.connect(check_if_complete)
 	timer_display.timer = new_timer
